@@ -1,0 +1,82 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ program.name }}{% endblock %}
+
+{% block content %}
+<div class="hero-section">
+    <div class="container">
+        <h1>{{ program.name }}</h1>
+        <p>{{ program.university }}</p>
+    </div>
+</div>
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-8">
+            <div class="card mb-3">
+                <div class="card-header">
+                    <h5>Основная информация</h5>
+                </div>
+                <div class="card-body">
+                    <p><strong>Университет:</strong> {{ program.university }}</p>
+                    {% if program.faculty %}
+                    <p><strong>Факультет:</strong> {{ program.faculty }}</p>
+                    {% endif %}
+                    <p><strong>Уровень:</strong> {{ program.get_degree_level_display }}</p>
+                    <p><strong>Длительность:</strong> {{ program.duration }}</p>
+                    <p><strong>Годы:</strong> {{ program.start_year }} - {{ program.end_year }}</p>
+                </div>
+            </div>
+
+            <div class="card mb-3">
+                <div class="card-header">
+                    <h5>Что изучаю</h5>
+                </div>
+                <div class="card-body">
+                    {{ program.what_i_study|linebreaks }}
+                </div>
+            </div>
+
+            <div class="card mb-3">
+                <div class="card-header">
+                    <h5>Чему научусь</h5>
+                </div>
+                <div class="card-body">
+                    {{ program.what_i_learn|linebreaks }}
+                </div>
+            </div>
+
+            <div class="card mb-3">
+                <div class="card-header">
+                    <h5>Перспективы</h5>
+                </div>
+                <div class="card-body">
+                    {{ program.career_prospects|linebreaks }}
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-header">
+                    <h5>Преимущества</h5>
+                </div>
+                <div class="card-body">
+                    <ul>
+                        {% for advantage in program.advantages_list %}
+                        <li>{{ advantage }}</li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="mt-3">
+        <a href="{% url 'portfolio:educational_program' %}" class="btn btn-secondary">Назад</a>
+        {% if program.program_url %}
+        <a href="{{ program.program_url }}" target="_blank" class="btn btn-primary">Сайт программы</a>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

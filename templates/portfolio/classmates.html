@@ -1,0 +1,103 @@
+{% extends 'base.html' %}
+
+{% block title %}Одногруппники{% endblock %}
+
+{% block content %}
+<div class="hero-section">
+    <div class="container">
+        <h1>Мои одногруппники</h1>
+    </div>
+</div>
+
+<div class="container">
+    <!-- Простые фильтры -->
+    <div class="card mb-4">
+        <div class="card-body">
+            <form method="get" class="row">
+                <div class="col-md-4">
+                    <input type="text" class="form-control" name="search" value="{{ search }}" placeholder="Поиск по имени...">
+                </div>
+                <div class="col-md-3">
+                    <select class="form-select" name="city">
+                        <option value="">Все города</option>
+                        {% for c in cities %}
+                        <option value="{{ c }}" {% if city == c %}selected{% endif %}>{{ c }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="col-md-3">
+                    <select class="form-select" name="group_number">
+                        <option value="">Все группы</option>
+                        {% for g in groups %}
+                        <option value="{{ g }}" {% if group_number == g %}selected{% endif %}>{{ g }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="col-md-2">
+                    <button type="submit" class="btn btn-primary w-100">Найти</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <p>Найдено: {{ total_count }}</p>
+
+    {% if page_obj %}
+    <div class="row">
+        {% for classmate in page_obj %}
+        <div class="col-md-4 mb-3">
+            <div class="card">
+                <div class="card-body text-center">
+
+                    
+                    <h5>{{ classmate.full_name }}</h5>
+                    
+                    {% if classmate.is_close_friend %}
+                    <span class="badge bg-warning">Близкий друг</span>
+                    {% endif %}
+                    
+                    {% if classmate.group_number %}
+                    <p>Группа: {{ classmate.group_number }}</p>
+                    {% endif %}
+                    
+                    {% if classmate.city %}
+                    <p>Город: {{ classmate.city }}</p>
+                    {% endif %}
+                    
+                    <p>{{ classmate.email }}</p>
+
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+
+    <!-- Простая пагинация -->
+    {% if page_obj.has_other_pages %}
+    <nav>
+        <ul class="pagination">
+            {% if page_obj.has_previous %}
+            <li class="page-item">
+                <a class="page-link" href="?page={{ page_obj.previous_page_number }}">Назад</a>
+            </li>
+            {% endif %}
+            
+            <li class="page-item active">
+                <span class="page-link">{{ page_obj.number }}</span>
+            </li>
+            
+            {% if page_obj.has_next %}
+            <li class="page-item">
+                <a class="page-link" href="?page={{ page_obj.next_page_number }}">Вперед</a>
+            </li>
+            {% endif %}
+        </ul>
+    </nav>
+    {% endif %}
+    {% else %}
+    <div class="alert alert-info">
+        <p>Одногруппники не найдены</p>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

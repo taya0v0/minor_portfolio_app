@@ -1,0 +1,98 @@
+{% extends 'base.html' %}
+
+{% block title %}Преподаватели{% endblock %}
+
+{% block content %}
+<div class="hero-section">
+    <div class="container">
+        <h1>Преподаватели</h1>
+    </div>
+</div>
+
+<div class="container">
+    <!-- Простые фильтры -->
+    <div class="card mb-4">
+        <div class="card-body">
+            <form method="get" class="row">
+                <div class="col-md-6">
+                    <input type="text" class="form-control" name="search" value="{{ search }}" placeholder="Поиск по имени...">
+                </div>
+                <div class="col-md-4">
+                    <select class="form-select" name="role">
+                        <option value="">Все должности</option>
+                        {% for value, label in role_choices %}
+                        <option value="{{ value }}" {% if role == value %}selected{% endif %}>{{ label }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="col-md-2">
+                    <button type="submit" class="btn btn-primary w-100">Найти</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    {% if academic_directors %}
+    <h3>Руководители</h3>
+    <div class="row mb-4">
+        {% for person in academic_directors %}
+        <div class="col-md-4 mb-3">
+            <div class="card">
+                <div class="card-body text-center">
+                    <h5>{{ person.full_name }}</h5>
+                    <p>{{ person.get_role_display }}</p>
+                    {% if person.department %}
+                    <p><small>{{ person.department }}</small></p>
+                    {% endif %}
+                    <p>Email: {{ person.email }}</p>
+                    {% if person.phone %}
+                    <p>Телефон: {{ person.phone }}</p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    {% endif %}
+
+    {% if managers %}
+    <h3>Менеджеры</h3>
+    <div class="row mb-4">
+        {% for person in managers %}
+        <div class="col-md-4 mb-3">
+            <div class="card">
+                <div class="card-body text-center">
+                    <h6>{{ person.full_name }}</h6>
+                    <p><small>{{ person.get_role_display }}</small></p>
+                    <p><small>{{ person.email }}</small></p>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    {% endif %}
+
+        {% if deans %}
+    <h3>Деканы </h3>
+    <div class="row mb-4">
+        {% for person in deans %}
+        <div class="col-md-4 mb-3">
+            <div class="card">
+                <div class="card-body text-center">
+                    <h6>{{ person.full_name }}</h6>
+                    <p><small>{{ person.get_role_display }}</small></p>
+                    <p><small>{{ person.email }}</small></p>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    {% endif %}
+
+    {% if not management_list %}
+    <div class="alert alert-info">
+        <p>Информация о преподавателях не найдена</p>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

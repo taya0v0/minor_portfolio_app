@@ -1,0 +1,59 @@
+{% extends 'base.html' %}
+
+{% block title %}Обо мне{% endblock %}
+
+{% block content %}
+<div class="hero-section">
+    <div class="container">
+        <h1>Обо мне</h1>
+    </div>
+</div>
+
+<div class="container">
+    {% if personal_info %}
+    <div class="row">
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-body text-center">
+                    {% if personal_info.photo %}
+                    <img src="{{ personal_info.photo }}" alt="Мое фото" class="img-fluid profile-image mb-3">
+                    {% else %}
+                    <img src="https://via.placeholder.com/150" alt="Фото" class="img-fluid profile-image mb-3">
+                    {% endif %}
+                    <h4>{{ personal_info.full_name }}</h4>
+                    {% if personal_info.birth_date %}
+                    <p>Дата рождения: {{ personal_info.birth_date }}</p>
+                    {% endif %}
+                    <p>Город: {{ personal_info.city }}</p>
+                </div>
+            </div>
+            
+            <div class="card">
+                <div class="card-header">
+                    <h5>Контакты</h5>
+                </div>
+                <div class="card-body">
+                    <p>Email: {{ personal_info.email }}</p>
+                    <p>Телефон: {{ personal_info.phone }}</p>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-header">
+                    <h5>О себе</h5>
+                </div>
+                <div class="card-body">
+                    {{ personal_info.resume|linebreaks }}
+                </div>
+            </div>
+        </div>
+    </div>
+    {% else %}
+    <div class="alert alert-info">
+        <p>Информация не добавлена</p>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

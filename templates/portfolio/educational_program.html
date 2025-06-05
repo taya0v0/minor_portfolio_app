@@ -1,0 +1,90 @@
+{% extends 'base.html' %}
+
+{% block title %}Учеба{% endblock %}
+
+{% block content %}
+<div class="hero-section">
+    <div class="container">
+        <h1>Моя учеба</h1>
+    </div>
+</div>
+
+<div class="container">
+    <!-- Простые фильтры -->
+    <div class="card mb-4">
+        <div class="card-body">
+            <form method="get" class="row">
+                <div class="col-md-6">
+                    <input type="text" class="form-control" name="search" value="{{ search }}" placeholder="Поиск...">
+                </div>
+                <div class="col-md-4">
+                    <select class="form-select" name="degree_level">
+                        <option value="">Все уровни</option>
+                        {% for value, label in degree_choices %}
+                        <option value="{{ value }}" {% if degree_level == value %}selected{% endif %}>{{ label }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="col-md-2">
+                    <button type="submit" class="btn btn-primary w-100">Найти</button>
+                </div>
+            </form>
+        </div>
+    </div>
+    
+    <p>Найдено: {{ total_count }}</p>
+    
+    {% if page_obj %}
+        {% for program in page_obj %}
+        <div class="card mb-3">
+            <div class="card-header">
+                <h5>{{ program.name }}</h5>
+                <small>{{ program.get_degree_level_display }}</small>
+            </div>
+            <div class="card-body">
+                <p><strong>Университет:</strong> {{ program.university }}</p>
+                {% if program.faculty %}
+                <p><strong>Факультет:</strong> {{ program.faculty }}</p>
+                {% endif %}
+                <p><strong>Годы обучения:</strong> {{ program.start_year }} - {{ program.end_year }}</p>
+                
+                <h6>Что изучаю:</h6>
+                <p>{{ program.what_i_study }}</p>
+                
+                <a href="{% url 'portfolio:program_detail' program.id %}" class="btn btn-primary">Подробнее</a>
+                {% if program.program_url %}
+                <a href="{{ program.program_url }}" target="_blank" class="btn btn-outline-primary">Сайт программы</a>
+                {% endif %}
+            </div>
+        </div>
+        {% endfor %}
+        
+        <!-- Простая пагинация -->
+        {% if page_obj.has_other_pages %}
+        <nav>
+            <ul class="pagination">
+                {% if page_obj.has_previous %}
+                <li class="page-item">
+                    <a class="page-link" href="?page={{ page_obj.previous_page_number }}">Назад</a>
+                </li>
+                {% endif %}
+                
+                <li class="page-item active">
+                    <span class="page-link">{{ page_obj.number }}</span>
+                </li>
+                
+                {% if page_obj.has_next %}
+                <li class="page-item">
+                    <a class="page-link" href="?page={{ page_obj.next_page_number }}">Вперед</a>
+                </li>
+                {% endif %}
+            </ul>
+        </nav>
+        {% endif %}
+    {% else %}
+    <div class="alert alert-info">
+        <p>Программы не найдены</p>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

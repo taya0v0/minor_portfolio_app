@@ -1,0 +1,42 @@
+{% extends 'base.html' %}
+
+{% block title %}Главная{% endblock %}
+
+{% block content %}
+<div class="hero-section">
+    <div class="container">
+        <h1>Добро пожаловать</h1>
+        <p>Это мой сайт</p>
+    </div>
+</div>
+
+<div class="container">
+    {% if personal_info %}
+    <div class="row">
+        <div class="col-md-4">
+            {% if personal_info.photo %}
+            <img src="{{ personal_info.photo }}" alt="Мое фото" class="img-fluid profile-image mx-auto d-block">
+            {% else %}
+            <img src="https://via.placeholder.com/150" alt="Фото" class="img-fluid profile-image mx-auto d-block">
+            {% endif %}
+        </div>
+        <div class="col-md-8">
+            <h2>{{ personal_info.full_name }}</h2>
+            <p><strong>Email:</strong> {{ personal_info.email }}</p>
+            <p><strong>Телефон:</strong> {{ personal_info.phone }}</p>
+            <p><strong>Город:</strong> {{ personal_info.city }}</p>
+            <p>{{ personal_info.resume }}</p>
+            <a href="{% url 'portfolio:about_me' %}" class="btn btn-primary">Подробнее</a>
+        </div>
+    </div>
+    
+    <hr class="my-5">
+    
+
+    {% else %}
+    <div class="alert alert-info">
+        <p>Добавьте информацию о себе в панели администратора</p>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}
